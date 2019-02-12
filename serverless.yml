@@ -1,0 +1,67 @@
+service: something-exciting
+
+package:
+  exclude:
+    - 'aws/*'
+    - 'cd-assets/*'
+    - 'src/**/*.test.js'
+    - .gitignore
+    - config.yml
+    - package.json
+    - package-lock.json
+    - README.md
+    - secrets.yml
+    - serverless.yml
+
+provider:
+  name: aws
+  timeout: 20
+  memorySize: 128
+  runtime: python3.6
+
+  stage: ${opt:stage, 'dev'}
+  profile: default
+  region: ${opt:region, '${self:custom.config.region}'}
+
+  environment:    
+    GB_API: ${self:custom.config.geckoboard_api}
+    STACK: ${self:custom.stack}
+    BUCKET_NAME: ${ssm:bucketName}
+    GREENHOUSE_AUTH_KEY: ${ssm:greenhouseAuthKey}
+    BAMBOOZLED_API_KEY: ${ssm:bamboozledApiKey}
+    GB_AUTHORIZATION_KEY: ${ssm:geckoboardAuthorizationKey}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:*"
+      Resource: "*"
+
+plugins:
+- serverless-offline
+
+functions:
+  bamboohr:
+    handler: src/bamboohr_outofoffice.lambda_handler
+    events:
+      - schedule: rate(2 hours)
+
+  interviews:
+    handler: src/greenhouse_interviews_thisweek.lambda_handler
+    events:
+      - schedule: rate(2 hours)
+
+  jobslist:
+    handler: src/greenhouse_jobslist.lambda_handler
+    events:
+      - schedule: rate(2 hours)
+
+  
+
+custom:
+  stack: ${self:service}-${self:provider.stage}
+  config: ${file(./config.yml):${self:provider.stage}}
+  secrets: ${file(./secrets.yml):${self:provider.stage}}
+
+
+  # https://s3.console.aws.amazon.com/s3/buckets/pylambdas/?region=us-west-2&tab=overview&currentmarker=1k9uWMivyeXlWbDah4pbFyVWdpcLJH5wb1lhg6C0O5YU7ngIKXvhj3ZLASWyQlWG64tjrwSE5yNPq5aiNLlRXWQ%3D%3D

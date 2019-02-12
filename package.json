@@ -1,0 +1,32 @@
+{
+  "name": "something-exciting",
+  "version": "0.0.1",
+  "description": "We need data to inspire people - and we need it now!",
+  "main": "index.js",
+  "scripts": {
+    "offline": "./node_modules/.bin/serverless offline start --stage dev",
+    "test": "mocha \"src/**/*.test.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bitgaming/something-exciting.git"
+  },
+  "author": "Joshua Channon",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/bitgaming/something-exciting/issues"
+  },
+  "homepage": "https://github.com/bitgaming/something-exciting#readme",
+  "devDependencies": {
+    "aws-sdk": "^2.346.0",
+    "mocha": "^5.2.0",
+    "serverless": "^1.32.0",
+    "serverless-offline": "^3.29.0",
+    "serverless-secrets-plugin": "^0.1.0"
+  },
+  "dependencies": {
+    "geckoboard": "^1.2.0",
+    "moment": "^2.22.2",
+    "pg": "^7.6.0"
+  }
+}

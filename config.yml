@@ -1,0 +1,36 @@
+dev: &dev
+  account_id: 604288277707
+  region: eu-west-1
+
+  geckoboard_api: 6e78495966d11405ded5ce2e5d339aec
+
+int: &int
+  <<: *dev
+  account_id: 369413076185
+
+  pg_host: infrastructure-postgres-int-v1.cospos8c9psu.eu-west-1.rds.amazonaws.com
+  pg_databse: gaming-cloudbet
+  pg_port: 5432
+  pg_user: gaming-cloudbet-something-exciting
+
+  vpc_id: vpc-06fd6b62
+  subnet_ids:
+    - subnet-329ffc44
+    - subnet-2d6adb75
+    - subnet-149aed70
+
+stg: &stg
+  <<: *int
+  pg_host: infrastructure-postgres-stg-v1.cospos8c9psu.eu-west-1.rds.amazonaws.com
+
+prod:
+  <<: *stg
+  account_id: 755068285452
+
+  pg_host: infrastructure-postgres-prod-v1.cxduiodlkwek.eu-west-1.rds.amazonaws.com
+
+  vpc_id: vpc-599b853d
+  subnet_ids:
+    - subnet-7481a12c
+    - subnet-88f314ef
+    - subnet-42ac4a0b
